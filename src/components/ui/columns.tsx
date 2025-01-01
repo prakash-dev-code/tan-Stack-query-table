@@ -2,6 +2,7 @@
 
 import { IProduct } from "@/type/table";
 import { ColumnDef } from "@tanstack/react-table";
+import { Badge } from "./badge";
 
 export const columns: ColumnDef<IProduct>[] = [
   {
@@ -34,6 +35,19 @@ export const columns: ColumnDef<IProduct>[] = [
     accessorKey: "availabilityStatus",
     header: "Availability Status",
     enableSorting: true,
+    cell: ({ row }) => {
+      const status = row.original.availabilityStatus;
+
+      return (
+        <Badge
+          className={`${
+            status === "In Stock" ? " bg-green-600" : " bg-red-500"
+          } rounded-md text-xs font-medium`}
+        >
+          {status === "In Stock" ? "Available" : "Not Available"}
+        </Badge>
+      );
+    },
   },
 
   {

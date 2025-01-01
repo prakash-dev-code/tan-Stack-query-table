@@ -48,21 +48,21 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
   });
 
   return (
-    <div className="w-[95%] flex flex-col gap-6">
+    <div className="w-[95%] flex flex-col gap-6 ">
       {/* Global Search Input */}
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-center">
         <div className=" flex justify-start w-full">
           <Input
             placeholder="Search here..."
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
-            className="max-w-sm"
+            className="max-w-sm shadow-sm"
           />
         </div>
-        <div className="flex justify-end w-full">
+        <div className="flex justify-end  mt-4 sm:mt-0 shadow-sm">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline" className="ml-auto hover:bg-white">
                 Select Column <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -89,7 +89,7 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
         </div>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-white shadow-md">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

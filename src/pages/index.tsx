@@ -11,6 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { columns } from "@/components/ui/columns";
+import Loader from "@/utils/loader";
 const DataTable = React.lazy(() => import("@/components/home-page/dataTable"));
 
 const fetchProducts = async (
@@ -53,7 +54,11 @@ export default function Home() {
   };
 
   if (isLoading) {
-    return <div className="text-center">Loading...</div>;
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (isError) {
@@ -65,8 +70,10 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full h-auto flex justify-center flex-col gap-8 items-center p-4">
-      <h1 className="text-2xl font-medium">Data Table Using TanStack Query</h1>
+    <div className="w-full h-auto flex justify-center flex-col gap-8 items-center p-5 bg-offWhite">
+      <h1 className="text-lg text-center md:text-2xl font-medium mt-2 mb-4">
+        Dynamic Data Table with TanStack Query Integration
+      </h1>
 
       <React.Suspense fallback={null}>
         <DataTable columns={columns} data={data?.products || []} />
