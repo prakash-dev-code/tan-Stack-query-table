@@ -4,8 +4,10 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
+  getFilteredRowModel, // Import for filtering
+  getSortedRowModel,
   useReactTable,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -16,26 +18,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IProduct } from "@/type/table";
+import React, { useState } from "react";
 import { Input } from "../ui/input";
-import { useState } from "react";
 
-interface DataTableProps {
-  columns: ColumnDef<IProduct>[]; // Use `ColumnDef` directly for column definitions
-  data: IProduct[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[]; // Generic column type
+  data: TData[]; // Data passed as prop
 }
 
-const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
-  const [globalFilter, setGlobalFilter] = useState<string>("");
+const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
+  const [sorting, setSorting] = useState<SortingState>([]); // Sorting state
+  const [globalFilter, setGlobalFilter] = useState<string>(""); // Global filter state
 
   const table = useReactTable({
     data,
     columns,
-    state: {
-      globalFilter, // Pass the global filter state
-    },
+    state: { globalFilter, sorting },
+    onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter, // Update the global filter state
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(), // Add filtering logic
+    getFilteredRowModel: getFilteredRowModel(), // Apply filtering
+    getSortedRowModel: getSortedRowModel(), // Enable sorting
   });
 
   return (
@@ -45,7 +48,7 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
         <Input
           placeholder="Search here..."
           value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)}
+          onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
           className="max-w-sm"
         />
       </div>
@@ -57,12 +60,21 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className="cursor-pointer select-none"
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -71,10 +83,7 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

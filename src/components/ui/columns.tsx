@@ -28,19 +28,23 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    enableSorting: true,
   },
   {
     accessorKey: "availabilityStatus",
     header: "Availability Status",
+    enableSorting: true,
   },
 
   {
     accessorKey: "price",
     header: "Price",
+    enableSorting: true,
   },
 
   {
     accessorKey: "rating",
     header: "Rating",
+    enableSorting: true,
   },
 ];
