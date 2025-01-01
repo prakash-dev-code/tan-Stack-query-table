@@ -1,10 +1,9 @@
 "use client";
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel, // Import for filtering
+  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
   SortingState,
@@ -17,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IProduct } from "@/type/table";
+import { DataTableProps, IProduct } from "@/type/table";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import {
@@ -29,17 +28,9 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-
-interface DataTableProps<TData> {
-  columns: ColumnDef<TData>[]; // Generic column type
-  data: TData[]; // Data passed as prop
-}
 
 const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
   const [sorting, setSorting] = useState<SortingState>([]); // Sorting state
