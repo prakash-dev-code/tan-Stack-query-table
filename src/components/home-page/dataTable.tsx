@@ -20,7 +20,21 @@ import {
 import { IProduct } from "@/type/table";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
-import { ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
+import {
+  ArrowDownNarrowWide,
+  ArrowUpNarrowWide,
+  ChevronDown,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]; // Generic column type
@@ -55,12 +69,32 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
           />
         </div>
         <div className="flex justify-end w-full">
-          <Input
-            placeholder="Search here..."
-            value={globalFilter}
-            onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
-            className="max-w-sm"
-          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Select Column <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.columnDef.header as string}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
