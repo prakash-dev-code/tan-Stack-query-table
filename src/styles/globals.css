@@ -14,8 +14,70 @@
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+.ui-loader {
+  @apply inline-block w-12 h-12;
+}
+
+.loader-blk {
+  @apply text-blue-500;
+  animation: rotate-outer08 1.4s linear infinite;
+}
+
+.multiColor-loader {
+  @apply block;
+  animation: color-anim08 1.4s infinite;
+}
+
+.loader-circle {
+  stroke: currentColor;
+}
+
+.loader-circle-animation {
+  animation: rotate-inner08 1.4s ease-in-out infinite;
+  stroke-dasharray: 80px, 200px;
+  stroke-dashoffset: 0;
+}
+
+@keyframes rotate-outer08 {
+  0% {
+    transform-origin: 50% 50%;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-inner08 {
+  0% {
+    stroke-dasharray: 1px, 200px;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -15px;
+  }
+  100% {
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -125px;
+  }
+}
+
+@keyframes color-anim08 {
+  0% {
+    color: #4285f4;
+  }
+  25% {
+    color: #ea4335;
+  }
+  50% {
+    color: #f9bb2d;
+  }
+  75% {
+    color: #34a853;
+  }
 }
