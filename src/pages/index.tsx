@@ -3,6 +3,15 @@ import { Roboto } from "next/font/google";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IProduct } from "@/type/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -43,8 +52,28 @@ export default function Home() {
     >
       <h1 className="text-2xl font-medium">Data Table Using TanStack Query</h1>
 
-      <React.Suspense fallback={<div>Loading Table...</div>}>
+      <React.Suspense fallback={null}>
         <DataTable columns={columns} data={data || []} />
+        <div className="w-[94%]  flex justify-end items-center ">
+          <div className="ml-auto">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </div>
       </React.Suspense>
     </div>
   );
