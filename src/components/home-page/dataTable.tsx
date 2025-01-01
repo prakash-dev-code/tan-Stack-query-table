@@ -14,15 +14,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TData } from "@/type/table";
+import { IProduct } from "@/type/table";
 import { Input } from "../ui/input";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
+  handelFilterValueChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handelSeacrhClick: () => void;
+  searchValue: string;
 }
 
-const DataTable = ({ columns, data }: DataTableProps<TData>) => {
+const DataTable = ({
+  columns,
+  data,
+  handelFilterValueChanged,
+  handelSeacrhClick,
+  searchValue,
+}: DataTableProps<IProduct>) => {
   const table = useReactTable({
     data,
     columns,
@@ -31,16 +40,7 @@ const DataTable = ({ columns, data }: DataTableProps<TData>) => {
 
   return (
     <div className=" w-full flex flex-col gap-4 ">
-      <div className="flex items-center ">
-        <Input
-          placeholder="Search email here..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>
+      <div className="flex items-center "></div>
 
       <div className="rounded-md border">
         <Table>
