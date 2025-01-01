@@ -4,6 +4,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { IProduct } from "@/type/table";
 import { Input } from "../ui/input";
+import { useState } from "react";
 
 interface DataTableProps {
   columns: ColumnDef<IProduct>[]; // Use `ColumnDef` directly for column definitions
@@ -23,21 +25,27 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+
   const table = useReactTable({
     data,
     columns,
+    state: {
+      globalFilter, // Pass the global filter state
+    },
+    onGlobalFilterChange: setGlobalFilter, // Update the global filter state
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(), // Add filtering logic
   });
 
   return (
     <div className="w-full flex flex-col gap-4">
+      {/* Global Search Input */}
       <div className="flex items-center">
         <Input
-          placeholder="Search email here..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
+          placeholder="Search here..."
+          value={globalFilter}
+          onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
       </div>

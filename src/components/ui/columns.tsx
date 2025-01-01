@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "id",
-    header: "Product ID",
+    header: "Sr. no.",
   },
   {
     accessorKey: "thumbnail",
@@ -14,7 +14,7 @@ export const columns: ColumnDef<IProduct>[] = [
       <img
         src={row?.original?.thumbnail}
         alt="Product Thumbnail"
-        className="h-12 w-12 object-cover rounded-md"
+        className="h-10 w-10 object-cover rounded-full"
       />
     ),
     header: "Product Image",
@@ -22,6 +22,16 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    enableSorting: true,
+  },
+
+  {
+    accessorKey: "category",
+    header: "Category",
+  },
+  {
+    accessorKey: "availabilityStatus",
+    header: "Availability Status",
   },
 
   {
@@ -32,17 +42,5 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "rating",
     header: "Rating",
-  },
-  {
-    accessorKey: "brand",
-    header: "Brand",
-  },
-  {
-    accessorKey: "category",
-    header: "Category",
-  },
-  {
-    accessorKey: "availabilityStatus",
-    header: "Availability Status",
   },
 ];
