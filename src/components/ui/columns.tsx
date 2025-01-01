@@ -14,7 +14,7 @@ export const columns: ColumnDef<IProduct>[] = [
       <img
         src={row?.original?.thumbnail}
         alt="Product Thumbnail"
-        className="h-10 w-10 object-cover rounded-full"
+        className="h-[35px] w-[35px] object-cover rounded-full"
       />
     ),
     header: "Product Image",

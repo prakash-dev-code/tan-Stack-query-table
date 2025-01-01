@@ -43,15 +43,25 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
   });
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-[95%] flex flex-col gap-6">
       {/* Global Search Input */}
-      <div className="flex items-center">
-        <Input
-          placeholder="Search here..."
-          value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
-          className="max-w-sm"
-        />
+      <div className="flex flex-row justify-between items-center">
+        <div className=" flex justify-start w-full">
+          <Input
+            placeholder="Search here..."
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
+            className="max-w-sm"
+          />
+        </div>
+        <div className="flex justify-end w-full">
+          <Input
+            placeholder="Search here..."
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
+            className="max-w-sm"
+          />
+        </div>
       </div>
 
       <div className="rounded-md border">
