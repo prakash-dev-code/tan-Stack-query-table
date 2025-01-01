@@ -20,6 +20,7 @@ import {
 import { IProduct } from "@/type/table";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
+import { ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[]; // Generic column type
@@ -70,8 +71,12 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
                           header.getContext()
                         )}
                         {{
-                          asc: " 🔼",
-                          desc: " 🔽",
+                          asc: (
+                            <ArrowUpNarrowWide className=" ml-1   inline w-[16px] h-[16px]" />
+                          ),
+                          desc: (
+                            <ArrowDownNarrowWide className=" ml-1 inline w-[16px] h-[16px]" />
+                          ),
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     )}
