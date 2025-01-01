@@ -17,21 +17,12 @@ import {
 import { IProduct } from "@/type/table";
 import { Input } from "../ui/input";
 
-interface DataTableProps<TData> {
-  columns: ColumnDef<TData>[];
-  data: TData[];
-  handelFilterValueChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handelSeacrhClick: () => void;
-  searchValue: string;
+interface DataTableProps {
+  columns: ColumnDef<IProduct>[]; // Use `ColumnDef` directly for column definitions
+  data: IProduct[];
 }
 
-const DataTable = ({
-  columns,
-  data,
-  handelFilterValueChanged,
-  handelSeacrhClick,
-  searchValue,
-}: DataTableProps<IProduct>) => {
+const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
   const table = useReactTable({
     data,
     columns,
@@ -39,8 +30,17 @@ const DataTable = ({
   });
 
   return (
-    <div className=" w-full flex flex-col gap-4 ">
-      <div className="flex items-center "></div>
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex items-center">
+        <Input
+          placeholder="Search email here..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
 
       <div className="rounded-md border">
         <Table>
@@ -61,7 +61,7 @@ const DataTable = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

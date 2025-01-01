@@ -9,27 +9,5 @@ export interface IProduct {
   brand: string;
   category: string;
   thumbnail: string;
-  images: string[];
   availabilityStatus: string;
-  dimensions: {
-    width: number;
-    height: number;
-    depth: number;
-  };
-  minimumOrderQuantity: number;
-  shippingInformation: string;
-  returnPolicy: string;
-  warrantyInformation: string;
-  weight: number;
-  sku: string;
-  tags: string[];
-  meta: {
-    createdAt: string;
-    updatedAt: string;
-  };
-  reviews: {
-    rating: number;
-    comment: string;
-    date: string;
-  }[];
 }
