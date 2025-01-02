@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IProduct } from "@/type/table";
 import {
@@ -11,16 +11,17 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { columns } from "@/components/ui/columns";
-import Loader from "@/utils/loader";
 const DataTable = React.lazy(() => import("@/components/home-page/dataTable"));
 
 const fetchProducts = async (
   page: number,
-  limit: number
+  limit: number,
+  searchTerm?: string
 ): Promise<{ products: IProduct[]; total: number }> => {
   const skip = (page - 1) * limit;
+  const query = searchTerm ? `&q=${searchTerm}` : "";
   const response = await fetch(
-    `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
+    `https://dummyjson.com/products/search/?limit=${limit}&skip=${skip}${query}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch products");
@@ -32,15 +33,27 @@ const fetchProducts = async (
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [searchValue, setSearchValue] = useState("");
+  const [appliedSearchValue, setAppliedSearchValue] = useState("");
   const limit: number = 10;
 
-  const { data, isLoading, isError, error } = useQuery<{
-    products: IProduct[];
-    total: number;
-  }>({
-    queryKey: ["products", currentPage],
+  // Debounced input handling
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setAppliedSearchValue(searchValue); // Apply the debounced search value
+    }, 500);
+
+    return () => clearTimeout(handler); // Cleanup the timeout
+  }, [searchValue]);
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["products", currentPage, appliedSearchValue],
     queryFn: async () => {
-      const result = await fetchProducts(currentPage, limit);
+      const result = await fetchProducts(
+        currentPage,
+        limit,
+        appliedSearchValue
+      );
       setTotalItems(result.total);
       return result;
     },
@@ -52,15 +65,6 @@ export default function Home() {
   const handlePageChange = (page: number): void => {
     setCurrentPage(page);
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-
   if (isError) {
     return (
       <div className="text-center text-red-500">
@@ -74,9 +78,14 @@ export default function Home() {
       <h1 className="text-lg text-center md:text-2xl font-medium mt-2 mb-4">
         Dynamic Data Table with TanStack Query Integration
       </h1>
-
       <React.Suspense fallback={null}>
-        <DataTable columns={columns} data={data?.products || []} />
+        <DataTable
+          columns={columns}
+          data={data?.products || []}
+          isLoading={isLoading}
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+        />
         <div className="w-[94%] flex justify-end items-center">
           <div className="ml-auto">
             <Pagination>

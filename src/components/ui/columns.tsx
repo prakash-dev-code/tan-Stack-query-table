@@ -4,12 +4,11 @@ import { IProduct } from "@/type/table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "./badge";
 import { Star } from "@/utils/svg-icons";
-// import { Star } from "lucide-react";
 
 export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "id",
-    header: "Sr. no.",
+    header: "ID",
   },
   {
     accessorKey: "thumbnail",

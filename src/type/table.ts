@@ -17,4 +17,7 @@ export interface IProduct {
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
+  isLoading: boolean;
+  setSearchValue: (value: string) => void;
+  searchValue: string;
 }
