@@ -3,6 +3,8 @@
 import { IProduct } from "@/type/table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "./badge";
+import { Star } from "@/utils/svg-icons";
+// import { Star } from "lucide-react";
 
 export const columns: ColumnDef<IProduct>[] = [
   {
@@ -57,11 +59,22 @@ export const columns: ColumnDef<IProduct>[] = [
     accessorKey: "price",
     header: "Price",
     enableSorting: true,
+    cell: ({ row }) => (
+      <div className="flex gap-1 items-center">
+        $<span>{row.original.price}</span>
+      </div>
+    ),
   },
 
   {
     accessorKey: "rating",
     header: "Rating",
     enableSorting: true,
+    cell: ({ row }) => (
+      <div className="flex gap-1 items-center">
+        <span>{row.original.rating}</span>
+        <Star />
+      </div>
+    ),
   },
 ];
