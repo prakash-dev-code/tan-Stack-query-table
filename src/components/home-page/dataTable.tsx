@@ -63,7 +63,7 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto hover:bg-white">
-                Select Column <ChevronDown />
+                Filter Column <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

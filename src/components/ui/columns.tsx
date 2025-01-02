@@ -40,9 +40,10 @@ export const columns: ColumnDef<IProduct>[] = [
 
       return (
         <Badge
+          variant="destructive"
           className={`${
             status === "In Stock" ? " bg-green-600" : " bg-red-500"
-          } rounded-md text-xs font-medium`}
+          } rounded-md text-xs text-white font-medium  `}
         >
           {status === "In Stock" ? "Available" : "Not Available"}
         </Badge>
