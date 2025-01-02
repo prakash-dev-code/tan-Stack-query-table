@@ -31,17 +31,24 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import Loader from "@/utils/loader";
 
-const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
-  const [sorting, setSorting] = useState<SortingState>([]); // Sorting state
-  const [globalFilter, setGlobalFilter] = useState<string>(""); // Global filter state
+const DataTable = ({
+  columns,
+  data,
+  isLoading,
+  setSearchValue,
+  searchValue,
+}: DataTableProps<IProduct>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
-    state: { globalFilter, sorting },
+
+    state: { sorting },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter, // Update the global filter state
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(), // Apply filtering
     getSortedRowModel: getSortedRowModel(), // Enable sorting
@@ -53,9 +60,9 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
       <div className="flex flex-col sm:flex-row justify-between items-center">
         <div className=" flex justify-start w-full">
           <Input
-            placeholder="Search here..."
-            value={globalFilter}
-            onChange={(event) => setGlobalFilter(event.target.value)} // Update filter
+            placeholder="Search Title here..."
+            value={searchValue}
+            onChange={(event) => setSearchValue(event.target.value)} // Update filter
             className="max-w-sm shadow-sm"
           />
         </div>
@@ -63,7 +70,7 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto hover:bg-white">
-                Select Column <ChevronDown />
+                Filter Column <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -90,62 +97,66 @@ const DataTable = ({ columns, data }: DataTableProps<IProduct>) => {
       </div>
 
       <div className="rounded-md border bg-white shadow-md">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        className="cursor-pointer select-none"
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: (
-                            <ArrowUpNarrowWide className=" ml-1   inline w-[16px] h-[16px]" />
-                          ),
-                          desc: (
-                            <ArrowDownNarrowWide className=" ml-1 inline w-[16px] h-[16px]" />
-                          ),
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <div
+                          className="cursor-pointer select-none"
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: (
+                              <ArrowUpNarrowWide className=" ml-1   inline w-[16px] h-[16px]" />
+                            ),
+                            desc: (
+                              <ArrowDownNarrowWide className=" ml-1 inline w-[16px] h-[16px]" />
+                            ),
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
                       )}
-                    </TableCell>
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );
