@@ -96,9 +96,11 @@ const DataTable = ({
         </div>
       </div>
 
-      <div className="rounded-md border bg-white shadow-md">
+      <div className="rounded-md border bg-white shadow-md min-h-[200px] h-auto w-auto">
         {isLoading ? (
-          <Loader />
+          <div className="flex items-center justify-center">
+            <Loader />
+          </div>
         ) : (
           <Table>
             <TableHeader>
