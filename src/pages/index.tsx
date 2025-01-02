@@ -40,10 +40,10 @@ export default function Home() {
   // Debounced input handling
   useEffect(() => {
     const handler = setTimeout(() => {
-      setAppliedSearchValue(searchValue); // Apply the debounced search value
+      setAppliedSearchValue(searchValue);
     }, 500);
 
-    return () => clearTimeout(handler); // Cleanup the timeout
+    return () => clearTimeout(handler);
   }, [searchValue]);
 
   const { data, isLoading, isError, error } = useQuery({
